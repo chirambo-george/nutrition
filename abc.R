@@ -48,5 +48,23 @@ stunting<- readxl::read_excel("C:/Users/LENOVO/Documents/__CODE/R/nutrition/nutr
 
 mw_admin_stunting <- left_join(mw_admin, stunting, by = c("adm2_name" ="District"))
 
-sf::st_write(mw_admin_stunting, "nutrition_app/data/mw_adm_stunting.shp")
+# sf::st_write(mw_admin_stunting, "nutrition_app/data/mw_adm_stunting.shp")
+
+mw_admin_stunting <- sf::st_read("nutrition_app/data/mw_adm_stunting.shp")
+colnames(mw_admin_stunting)
+library(tidyverse)
+library(ggplot2)
+
+# need to sort data and take top 5 
+
+top5 = mw_admin_stunting |> arrange(desc(Prb.2SD))
+top5 <- top5[1:5, ]
+ggplot(data = top5, aes(x = adm2_nm, y = Prb.2SD)) +
+  geom_col() + 
+  labs(title = "Districts where stunting was highest",
+       x = "District", y = "Stunting (%)")
+
+
+
+
 
