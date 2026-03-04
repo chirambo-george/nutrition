@@ -44,11 +44,13 @@ mw_admin <- mw_admin |> dplyr::select(-c("adm2_name1","adm2_name2","adm2_name3",
 
 # --- creating a new mw_admin object
 
-stunting<- readxl::read_excel("C:/Users/LENOVO/Documents/__CODE/R/nutrition/nutrition_app/data/mdhs_datasets.xlsx", sheet = "Stunting ")
-
-mw_admin_stunting <- left_join(mw_admin, stunting, by = c("adm2_name" ="District"))
+mdhs_datasets <- read_excel("nutrition_app/data/mdhs_datasets.xlsx", 
+                            sheet = "aggregates")
+mw_admin_stunting <- left_join(mw_admin, mdhs_datasets, by = c("adm2_name" ="District"))
 
 # sf::st_write(mw_admin_stunting, "nutrition_app/data/mw_adm_stunting.shp")
+st_write(mw_admin_stunting, dsn = "nutrition_app/data/mw_nutrition_data.geojson", driver = "GeoJSON")
+
 
 mw_admin_stunting <- sf::st_read("nutrition_app/data/mw_adm_stunting.shp")
 colnames(mw_admin_stunting)
@@ -58,7 +60,7 @@ library(ggplot2)
 # need to sort data and take top 5 
 
 top5 = mw_admin_stunting |> arrange(desc(Prb.2SD))
-top5 <- top5[1:5, ]
+top5
 ggplot(data = top5, aes(x = adm2_nm, y = Prb.2SD)) +
   geom_col() + 
   labs(title = "Districts where stunting was highest",

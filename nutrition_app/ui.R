@@ -28,7 +28,8 @@ ui <- page_navbar(
                         p(
                           bsicons::bs_icon("arrow-down", size = "1.5em"), 
                           "from 3% (2015-16 MDHS)",
-                          style = "font-size: 0.7em; color: #28a745; margin-top: 8px;"
+                          style = "font-size: 0.7em; color: #28a745; margin-top: 8px;",
+                          
                         )),
               value_box(
                 title = "2024 Overweight", 
@@ -54,13 +55,31 @@ ui <- page_navbar(
     
   
     nav_panel("Geographic Disparities", 
-              layout_columns(
-              leafletOutput("map_stunting"),
-              leafletOutput("map_wasting"),
-              leafletOutput("map_overweight"),
-              col_widths = 4, ),
+                    # layout_columns(
+                    # leafletOutput("map_stunting"),
+                    # leafletOutput("map_wasting"),
+                    # leafletOutput("map_overweight"),
+                    # col_widths = 4, ),
               
-              # graph under the maps for more vizzes
+              accordion(
+                  open = c("geographic disparities", "About"),
+                accordion_panel(
+                  "maps",
+                  
+                  layout_columns(
+                    leafletOutput("map_stunting"),
+                    leafletOutput("map_wasting"),
+                    leafletOutput("map_overweight")),
+                ),
+                
+                # graph under the maps for more vizzes
+                
+                accordion_panel(
+                  "bar charts",
+                  plotOutput("bar_chart")
+                )
+              )
+              
               ),
     
     # Panel with table ----
